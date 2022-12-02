@@ -78,6 +78,7 @@ def make_narrated_pptx(pptx_path, audio_folder_path):
                                                      mime_type='video/unknown')
     prs.save('tmp/narrated.pptx')
     path = 'tmp\\narrated.pptx'
+    path = os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],'narrated.pptx')
     #def generate():
     #    with open(path, 'rb') as f:
     #        yield from f
