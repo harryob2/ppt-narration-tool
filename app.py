@@ -20,7 +20,7 @@ external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'thekey'
 app.config['UPLOAD_FOLDER'] = 'tmp'
-MYDIR = os.path.dirname(__file__)
+
 
 
 class UploadPPTXFile(FlaskForm):
@@ -40,7 +40,8 @@ def pptx_upload():
     if form.validate_on_submit():
         file = form.file.data # First grab the file
         global path_to_pptx
-        path_to_pptx = os.path.join(os.path.abspath(MYDIR,secure_filename(file.filename)))
+        path_to_pptx = os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))
+        path_to_pptx = os.path.abspath(path_to_pptx)
         file.save(path_to_pptx) # Then save the file
         return redirect(url_for('audio_upload'))
     return render_template('pptx_upload.html', form=form)
@@ -50,7 +51,7 @@ def audio_upload():
     form = UploadAudioFile()
     if form.validate_on_submit():
         global path_to_pptx
-        path_to_audio_folder = os.path.join(os.path.abspath(os.path.dirname(__file__)),MYDIR + "/" + app.config['UPLOAD_FOLDER'],'audio_folder')
+        path_to_audio_folder = os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],'audio_folder')
         os.mkdir(path_to_audio_folder)
         for file in form.file.data:
             file_filename = secure_filename(file.filename)
