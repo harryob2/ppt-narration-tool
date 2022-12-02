@@ -13,10 +13,12 @@ from pptx.opc.package import PartFactory
 from pptx.parts.media import MediaPart
 from pptx.util import Inches
 import shutil
+import gunicorn
 
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 
 app = Flask(__name__)
+server = app.server
 app.config['SECRET_KEY'] = 'thekey'
 app.config['UPLOAD_FOLDER'] = 'tmp'
 
