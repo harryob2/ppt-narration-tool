@@ -30,7 +30,6 @@ class UploadAudioFile(FlaskForm):
     file = MultipleFileField('Files Upload', validators=[InputRequired(), FileAllowed(['mp3', 'm4a'])])
     submit = SubmitField('Continue')
 
-global path_to_pptx
 
     
 @app.route('/', methods=['GET','POST'])
@@ -39,7 +38,10 @@ def pptx_upload():
     form = UploadPPTXFile()
     if form.validate_on_submit():
         file = form.file.data # First grab the file
-        path_to_pptx = os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))
+        global ppt_file_name
+        ppt_file_name = str(secure_filename(file.filename))
+        global path_to_pptx
+        path_to_pptx = os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],ppt_file_name)
         print(path_to_pptx)
         file.save(path_to_pptx) # Then save the file
         return redirect(url_for('audio_upload'))
