@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body style='text-align:center'>
+    <h1>Audio files added succesfully</h1>
+    <br />
+    <br />
+    <a href="{{ url_for('download', filename=filename) }}">Click Here to Download Powerpoint with Audio</a></body>
+    <br />
+    <a href="{{ url_for('pptx_upload')}}">Click here to return to the homepage</a>
+    <br />
+    <br />
+    <br>
+    <a href="http://harryobrien.eu/feedback-ppt/">Click here to give much needed feedback</a>
+
+</html>

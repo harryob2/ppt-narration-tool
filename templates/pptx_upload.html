@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Powerpoint Upload</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body style='text-align:center'>
+    <h1>Free Powerpoint Narration Tool</h1>
+    <br />
+    <h5>Just upload your powerpoint and click continue.</h5>
+    <br />
+    <form method="POST" enctype="multipart/form-data">
+        {{form.hidden_tag()}}
+        <br />
+        {{form.file()}}
+        <br />
+        <br />
+        <br />
+        {{form.submit()}}
+        <p>NOTE: Only .pptx files are accepted.</p>
+    </form>
+</body>
+</html>
