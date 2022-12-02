@@ -48,7 +48,7 @@ def pptx_upload():
 def audio_upload():
     form = UploadAudioFile()
     if form.validate_on_submit():
-        global path_to_pptx
+        path_to_pptx = os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))
         path_to_audio_folder = os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],'audio_folder')
         os.mkdir(path_to_audio_folder)
         for file in form.file.data:
