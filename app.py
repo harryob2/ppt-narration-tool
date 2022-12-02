@@ -40,8 +40,7 @@ def pptx_upload():
     if form.validate_on_submit():
         file = form.file.data # First grab the file
         global path_to_pptx
-        path_to_pptx = os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))
-        path_to_pptx = os.path.abspath(path_to_pptx)
+        path_to_pptx = os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(file.filename))
         file.save(path_to_pptx) # Then save the file
         return redirect(url_for('audio_upload'))
     return render_template('pptx_upload.html', form=form)
