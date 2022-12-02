@@ -11,3 +11,4 @@ python-pptx==0.6.21
 Werkzeug==2.2.2
 WTForms==3.0.1
 XlsxWriter==3.0.3
+gunicorn==20.1.0
