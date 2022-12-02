@@ -3,11 +3,14 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title></title>
+    <title>Audio Upload</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
-<body>
-    <h1>Audio Upload</h1>
+<body style='text-align:center'>
+    <h3>Now upload all audio files you would like added to the powerpoint as narration files</h3>
+    <br />
+    <h5>All files must be numbered. Files not numbered will be ignored. The number corresponds to</h5>
+    <h5>what slide the audio file is posted to i.e. 1.mp3 will be the audio file for slide 1, 3.mp3 for slide 3, etc.</h5>
     <br />
     <br />
     <form method="POST" enctype="multipart/form-data">

@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template, request, flash, send_file
+from flask import Flask, redirect, url_for, render_template, request, flash, send_file, after_this_request, current_app
 import os
 import io
 from werkzeug.utils import secure_filename
@@ -12,6 +12,7 @@ from pptx import Presentation
 from pptx.opc.package import PartFactory
 from pptx.parts.media import MediaPart
 from pptx.util import Inches
+import shutil
 
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 
@@ -23,11 +24,11 @@ app.config['UPLOAD_FOLDER'] = 'tmp'
 
 class UploadPPTXFile(FlaskForm):
     file = FileField('File', validators=[InputRequired(), FileAllowed(['pptx'])])
-    submit = SubmitField('Upload File')
+    submit = SubmitField('Continue')
     
 class UploadAudioFile(FlaskForm):
     file = MultipleFileField('Files Upload', validators=[InputRequired(), FileAllowed(['mp3', 'm4a'])])
-    submit = SubmitField('Upload File')
+    submit = SubmitField('Continue')
 
 
     
@@ -55,12 +56,12 @@ def audio_upload():
             path_to_audio = os.path.join(path_to_audio_folder, file_filename)
             file.save(path_to_audio)
         make_narrated_pptx(path_to_pptx, path_to_audio_folder)
-        return send_file('tmp/narrated.pptx', as_attachment=True)
+        return render_template('download.html', filename='tmp/narrated.pptx')
     return render_template('audio_upload.html', form=form)
 
 def make_narrated_pptx(pptx_path, audio_folder_path):
-    left = top = width = height = Inches(1.0)
-    picture_path = r"static/mic.jpeg"
+    left = top = width = height = Inches(0.2)
+    picture_path = r"static/mic.png"
     prs = Presentation(fr"{pptx_path}")
     audio_folder = fr"{audio_folder_path}"
 
@@ -72,11 +73,51 @@ def make_narrated_pptx(pptx_path, audio_folder_path):
                                                      left,top,width,height,
                                                      poster_frame_image=picture_path,
                                                      mime_type='video/unknown')
-    prs.save('tmp/narrated.pptx') 
+    prs.save('tmp/narrated.pptx')
+    path = 'tmp\\narrated.pptx'
+    #def generate():
+    #    with open(path, 'rb') as f:
+    #        yield from f
+            
+    #    os.remove(path)
+    
+    shutil.rmtree('tmp/audio_folder', ignore_errors=True) # delete audio_folder
+    global path_to_pptx 
+    os.remove(path_to_pptx) # delete user uploaded pptx
+    global r
+    r = current_app.response_class(generate(path))
+    r.headers.set('Content-Disposition', 'attachment', filename='narrated.pptx')
+
+
+
+def generate(path):
+    with open(path, 'rb') as f:
+        yield from f
+            
+    os.remove(path)
+
+    
+@app.route('/download')
+def download():
+    # save narrated.pptx to memory and delete file
+    #path = 'tmp\\narrated.pptx'
+    #def generate():
+    #    with open(path, 'rb') as f:
+    #        yield from f
+            
+    #    os.remove(path)
+    
+    #shutil.rmtree('tmp/audio_folder', ignore_errors=True) # delete audio_folder
+    #global path_to_pptx 
+    #os.remove(path_to_pptx) # delete user uploaded pptx
+    #r = current_app.response_class(generate())
+    #r.headers.set('Content-Disposition', 'attachment', filename='narrated.pptx')
+    return r # stream file to user in memory (no need to save to disk)
 
 
 
 
+ 
 
 
 
