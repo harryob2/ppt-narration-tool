@@ -1,6 +1,6 @@
 from flask import Flask, url_for, render_template, request, send_file
 import os
-from pptx.package import Presentation
+from pptx import Presentation
 from pptx.util import Inches
 import collections
 import collections.abc
@@ -58,7 +58,7 @@ def make_narrated_pptx(pptx_path, audio_folder_path):
     print(pptx_path)
     left = top = width = height = Inches(0.2)
     picture_path = r"static/mic.png"
-    prs = Presentation(fr"{pptx_path}")
+    prs = Presentation(pptx_path)
     audio_folder = fr"{audio_folder_path}"
 
     for filename in os.listdir(audio_folder): # go through every audio file
