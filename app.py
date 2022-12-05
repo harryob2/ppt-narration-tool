@@ -2,6 +2,8 @@ from flask import Flask, url_for, render_template, request, send_file
 import os
 from pptx import Presentation
 from pptx.util import Inches
+import collections
+import _collections_abc
 import shutil
 import gunicorn
 
@@ -39,6 +41,7 @@ def make_pptx():
                 pptx_path = os.path.join(root, filename)
                 file.save(pptx_path)
 
+        print(pptx_path)
         narrated_file = make_narrated_pptx(pptx_path, audio_path) # create narrated file
 
     return send_file(narrated_file, as_attachment=True) # download narrated.pptx file
