@@ -3,7 +3,7 @@ import os
 from pptx import Presentation
 from pptx.util import Inches
 import collections
-import _collections_abc
+import collections.abc
 import shutil
 import gunicorn
 
@@ -55,6 +55,7 @@ def index():
 
 
 def make_narrated_pptx(pptx_path, audio_folder_path):
+    print(pptx_path)
     left = top = width = height = Inches(0.2)
     picture_path = r"static/mic.png"
     prs = Presentation(fr"{pptx_path}")
