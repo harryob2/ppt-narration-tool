@@ -35,6 +35,7 @@ def make_pptx():
 
             # save pptx file
             else:
+                print(pptx_path)
                 pptx_path = os.path.join(root, filename)
                 file.save(pptx_path)
 
