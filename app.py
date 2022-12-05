@@ -1,6 +1,6 @@
 from flask import Flask, url_for, render_template, request, send_file
 import os
-from pptx import Presentation
+from pptx.package import Presentation
 from pptx.util import Inches
 import collections
 import collections.abc
