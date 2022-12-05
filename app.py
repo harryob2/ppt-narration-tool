@@ -17,6 +17,7 @@ pptx_path = str()
 
 @app.route('/make_pptx', methods=['GET', 'POST'])
 def make_pptx():
+    global pptx_path
     if request.method == 'POST': 
         files = request.files.getlist('file') # get list of all uploaded files
         audio_path = os.path.join(root, 'audio') # make path to folder with all audio files
