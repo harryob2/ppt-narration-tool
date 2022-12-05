@@ -1,25 +1,120 @@
 ﻿<!DOCTYPE html>
-
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
     <title>Powerpoint Upload</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
+    <!-- Include Dropzone.js stylesheet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css">
+
+    <!-- Include Bootstrap CSS for additional styling options -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    
+    <style>
+        /* Custom styles for the page */
+        body {
+            background-color: #f5f5f5;
+            text-align: center;
+            font-family: "Helvetica Neue", sans-serif;
+        }
+
+        h1 {
+            font-weight: bold;
+            font-size: 62px;
+            color: #333;
+            margin-top: 50px;
+        }
+
+        h5 {
+            font-size: 28px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        h6 {
+            font-size: 22px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+    </style>
+
+    <!-- Custom styles for the submit button -->
+    <style>
+        .submit-button {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 30px;
+        }
+    </style>
+    <!-- Custom style for notes at bottom -->
+    <style>
+        .notes {
+            margin-top: 50px;
+            text-align: center;
+        }
+    </style>
+    <style>
+        .dropzone .dz-message {
+            font-size: 21px;
+        }
+    </style>
+
 </head>
-<body style='text-align:center'>
-    <h1>Free Powerpoint Narration Tool</h1>
-    <br />
-    <h5>Just upload your powerpoint and click continue.</h5>
-    <br />
-    <form method="POST" enctype="multipart/form-data">
-        {{form.hidden_tag()}}
-        <br />
-        {{form.file()}}
-        <br />
-        <br />
-        <br />
-        {{form.submit()}}
-        <p>NOTE: Only .pptx files are accepted.</p>
-    </form>
+<body>
+    <h1>Powerpoint Narration Tool</h1>
+    <h5>Just upload your powerpoint and audio files and click Submit.</h5>
+    <br>
+
+    <!-- Create a Bootstrap container to center the form on the page -->
+    <div class="container">
+        <form action="{{ url_for('make_pptx') }}" id="myForm" method="POST" enctype="multipart/form-data" class="dropzone" accept=".pptx, .mp3, .m4a, .wav">
+        </form>
+        <div class="submit-button">
+            <button id="myButton" type="submit" class="btn btn-primary">Submit</button>
+        </div>
+        <div class="notes">  
+            <br>      
+            <h6>NOTE: Only .pptx, .mp3, .m4a, and .wav files are accepted.</h6>
+            <br>
+            <h6>Name your audio files based on which slide you would like them to appear on.</h6>
+            <h6>For example, please name the slide 1 audio file '1.mp3', slide 4 '4.mp3', etc.</h6>
+            <br>
+            <br>
+            <a href='https://harryobrien.eu/feedback-ppt/' target="_blank">Click here to give some much desired feedback</a>
+        </div>
+    </div>
+
+    <!-- JavaScript script to submit the form when the button is clicked -->
+    <script>
+        // Get the form and button elements
+        var form = document.getElementById("myForm");
+        var button = document.getElementById("myButton");
+
+        // Add an event listener to the button to submit the form when clicked
+        button.addEventListener("click", function() {
+            form.submit();
+        });
+    </script>
+
+
+
+    <!-- Include Dropzone.js script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
+
+    <script>
+    // Initialize Dropzone.js on the form
+    var myDropzone = new Dropzone(".dropzone", {
+        url: "{{ url_for('make_pptx') }}",
+        acceptedFiles: ".pptx, .mp3, .m4a, .wav", // allowed file types
+        dictDefaultMessage: "Drag and drop your files here or click to open"
+    });
+
+    // Add a success event handler to log the uploaded files
+    myDropzone.on("success", function (file, response) {
+        console.log(file);
+    });
+</script>
 </body>
 </html>
