@@ -34,6 +34,7 @@ def make_pptx():
             # save audio files in audio folder
             elif filename.endswith('.mp3') or filename.endswith('.m4a') or filename.endswith('.wav'):
                 path = os.path.join(audio_path, filename)
+                print(path)
                 file.save(path)
 
             # save pptx file
