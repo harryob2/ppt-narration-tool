@@ -39,13 +39,15 @@ def make_pptx():
 
             # save pptx file
             else:
+                global pptx_path
                 pptx_path = os.path.join(root, filename)
                 file.save(pptx_path)
 
-        print(pptx_path)
-        narrated_file = make_narrated_pptx(pptx_path, audio_path) # create narrated file
+        if pptx_path is not None:
+            print(pptx_path)
+            narrated_file = make_narrated_pptx(pptx_path, audio_path) # create narrated file
 
-    return send_file(narrated_file, as_attachment=True) # download narrated.pptx file
+        return send_file(narrated_file, as_attachment=True) # download narrated.pptx file
 
 
 @app.route('/', methods=['GET', 'POST'])
