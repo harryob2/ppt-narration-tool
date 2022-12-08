@@ -69,7 +69,7 @@
 
     <!-- Create a Bootstrap container to center the form on the page -->
     <div class="container">
-        <form action="{{ url_for('make_pptx') }}" id="myForm" method="POST" enctype="multipart/form-data" class="dropzone" accept=".pptx, .mp3, .m4a, .wav">
+        <form id="myForm" method="POST" enctype="multipart/form-data" class="dropzone" accept=".pptx, .mp3, .m4a, .wav">
         </form>
         <div class="submit-button">
             <button id="myButton" type="submit" class="btn btn-primary">Submit</button>
