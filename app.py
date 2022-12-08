@@ -14,7 +14,7 @@ app.config['UPLOAD_FOLDER'] = 'tmp'
 
 root = os.path.join(os.path.abspath(os.path.dirname(__file__)), app.config['UPLOAD_FOLDER'])
 narrated_path = str()
-#pptx_path = str()
+pptx_path = None
 
 
 @app.route('/make_pptx', methods=['GET', 'POST'])
