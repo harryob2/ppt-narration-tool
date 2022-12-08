@@ -14,14 +14,13 @@ app.config['UPLOAD_FOLDER'] = 'tmp'
 
 root = os.path.join(os.path.abspath(os.path.dirname(__file__)), app.config['UPLOAD_FOLDER'])
 narrated_path = str()
-pptx_path = None
+pptx_path = str()
 
 
 @app.route('/make_pptx', methods=['GET', 'POST'])
 def make_pptx():
-    #global pptx_path
-    print(request.form('myForm'))
-    if request.form.is_submitted() == True: 
+    global pptx_path
+    if request.method == 'POST': 
         files = request.files.getlist('file') # get list of all uploaded files
         audio_path = os.path.join(root, 'audio') # make path to folder with all audio files
         if not os.path.exists(audio_path): # if the folder doesn't exist already, make it
@@ -35,20 +34,17 @@ def make_pptx():
             # save audio files in audio folder
             elif filename.endswith('.mp3') or filename.endswith('.m4a') or filename.endswith('.wav'):
                 path = os.path.join(audio_path, filename)
-                print(path)
                 file.save(path)
 
             # save pptx file
             else:
-                global pptx_path
                 pptx_path = os.path.join(root, filename)
                 file.save(pptx_path)
 
-        if pptx_path is not None:
-            print(pptx_path)
-            narrated_file = make_narrated_pptx(pptx_path, audio_path) # create narrated file
+        print(pptx_path)
+        narrated_file = make_narrated_pptx(pptx_path, audio_path) # create narrated file
 
-        return send_file(narrated_file, as_attachment=True) # download narrated.pptx file
+    return send_file(narrated_file, as_attachment=True) # download narrated.pptx file
 
 
 @app.route('/', methods=['GET', 'POST'])
