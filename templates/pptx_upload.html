@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
@@ -72,7 +72,7 @@
         <form id="myForm" method="POST" enctype="multipart/form-data" class="dropzone" accept=".pptx, .mp3, .m4a, .wav">
         </form>
         <div class="submit-button">
-            <button id="myButton" type="submit" class="btn btn-primary">Submit</button>
+            <button id="myButton" type="submit" class="btn btn-primary" onclick="submitForm()">Submit</button>
         </div>
         <div class="notes">  
             <br>      
@@ -88,14 +88,15 @@
 
     <!-- JavaScript script to submit the form when the button is clicked -->
     <script>
-        // Get the form and button elements
+        // Get the form element
         var form = document.getElementById("myForm");
-        var button = document.getElementById("myButton");
 
-        // Add an event listener to the button to submit the form when clicked
-        button.addEventListener("click", function() {
+        // Function to submit the form
+        function submitForm() {
+            // Submit the form to the process_data endpoint in Flask
+            form.action = "{{ url_for('process_data') }}";
             form.submit();
-        });
+        }
     </script>
 
 
@@ -108,13 +109,15 @@
     var myDropzone = new Dropzone(".dropzone", {
         url: "{{ url_for('make_pptx') }}",
         acceptedFiles: ".pptx, .mp3, .m4a, .wav", // allowed file types
-        dictDefaultMessage: "Drag and drop your files here or click to open"
+        dictDefaultMessage: "Drag and drop your files here or click to open",
     });
 
     // Add a success event handler to log the uploaded files
     myDropzone.on("success", function (file, response) {
         console.log(file);
     });
+
+
 </script>
 </body>
 </html>
