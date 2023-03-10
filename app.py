@@ -20,6 +20,7 @@ pptx_path = str()
 @app.route('/make_pptx', methods=['GET', 'POST'])
 def make_pptx():
     global pptx_path
+    global audio_path
     if request.method == 'POST': 
         files = request.files.getlist('file') # get list of all uploaded files
         audio_path = os.path.join(root, 'audio') # make path to folder with all audio files
@@ -40,11 +41,19 @@ def make_pptx():
             else:
                 pptx_path = os.path.join(root, filename)
                 file.save(pptx_path)
+    
+    return 'Files uploaded successfully'
 
-        print(pptx_path)
-        narrated_file = make_narrated_pptx(pptx_path, audio_path) # create narrated file
-
+        
+        
+@app.route('/process_data', methods=['GET','POST'])
+def process_data():
+    print('hello world')
+    global pptx_path
+    global audio_path
+    narrated_file = make_narrated_pptx(pptx_path, audio_path) # create narrated file
     return send_file(narrated_file, as_attachment=True) # download narrated.pptx file
+
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -55,7 +64,7 @@ def index():
 
 
 def make_narrated_pptx(pptx_path, audio_folder_path):
-    print(pptx_path)
+    #print(pptx_path)
     left = top = width = height = Inches(0.2)
     picture_path = r"static/mic.png"
     prs = Presentation(pptx_path)
