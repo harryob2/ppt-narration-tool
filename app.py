@@ -52,7 +52,12 @@ def process_data():
     global pptx_path
     global audio_path
     narrated_file = make_narrated_pptx(pptx_path, audio_path) # create narrated file
-    return send_file(narrated_file, as_attachment=True) # download narrated.pptx file
+    return render_template('download.html', filename=narrated_file)
+
+@app.route('/download')
+def download():
+    filename = request.args.get('filename')
+    return send_file(filename, as_attachment=True)
 
 
 

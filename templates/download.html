@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Download Narrated PowerPoint</title>
+
+    <!-- Include Bootstrap CSS for additional styling options -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <style>
+        /* Custom styles for the page */
+        body {
+            background-color: #f5f5f5;
+            text-align: center;
+            font-family: "Helvetica Neue", sans-serif;
+        }
+
+        h1 {
+            font-weight: bold;
+            font-size: 62px;
+            color: #333;
+            margin-top: 50px;
+        }
+
+        h5 {
+            font-size: 28px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        h6 {
+            font-size: 22px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+    </style>
+
+    <style>
+        .download-button {
+            margin-top: 150px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    
+        .download-button a {
+            font-size: 25px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Narrated PowerPoint Download</h1>
+    <h5>Your narrated PowerPoint file is ready for download.</h5>
+    <div class="download-button">
+        <p><a href="{{ url_for('download', filename=filename) }}" class="btn btn-primary">Download</a></p>
+    </div>
+
+    <a href='https://harryobrien.eu/feedback-ppt/' target="_blank">Click here to give some much desired feedback</a>
+
+</body>
+</html>
