@@ -36,9 +36,10 @@ def make_pptx():
         root = create_temp_dir()
 
         audio_path = os.path.join(root, 'audio')  # make path to folder with all audio files
-        print(f'Audio folder path: {audio_path}')
         if not os.path.exists(audio_path):  # if the folder doesn't exist already, make it
             os.mkdir(audio_path)
+            print(f'Audio folder path: {audio_path}')
+
 
         for file in files:  # iterate through every file
             filename = file.filename
