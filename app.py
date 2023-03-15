@@ -26,7 +26,6 @@ def make_pptx():
         files = request.files.getlist('file')  # get list of all uploaded files
 
         # Create a new temporary directory
-        # session['temp_dir'] = create_temp_dir()
         temp_dir = session['temp_dir']
 
         audio_path = os.path.join(temp_dir, 'audio')  # make path to folder with all audio files
@@ -50,8 +49,8 @@ def make_pptx():
             # save pptx file
             else:
                 pptx_path = os.path.join(temp_dir, filename)
-                file.save(pptx_path)
                 session['pptx_path'] = pptx_path
+                file.save(pptx_path)
                 print(f'Powerpoint saved: {pptx_path}')
 
     return 'Files uploaded successfully'
@@ -70,7 +69,6 @@ def process_data():
 
 @app.route('/download')
 def download():
-    # global pptx_path
     filename = request.args.get('filename')
     print('Successful download')
     return send_file(filename, as_attachment=True)
