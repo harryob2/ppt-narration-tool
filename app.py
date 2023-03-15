@@ -6,6 +6,7 @@ import collections
 import collections.abc
 import shutil
 import gunicorn
+import tempfile
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'thekey'
@@ -17,21 +18,32 @@ narrated_path = str()
 pptx_path = str()
 
 
+# Create a new temporary directory for each user's files
+def create_temp_dir():
+    temp_dir = tempfile.mkdtemp()
+    return temp_dir
+
+# Update the make_pptx() function
 @app.route('/make_pptx', methods=['GET', 'POST'])
 def make_pptx():
     global pptx_path
     global audio_path
-    if request.method == 'POST': 
-        files = request.files.getlist('file') # get list of all uploaded files
-        audio_path = os.path.join(root, 'audio') # make path to folder with all audio files
-        if not os.path.exists(audio_path): # if the folder doesn't exist already, make it
+    global root
+    if request.method == 'POST':
+        files = request.files.getlist('file')  # get list of all uploaded files
+
+        # Create a new temporary directory
+        root = create_temp_dir()
+
+        audio_path = os.path.join(root, 'audio')  # make path to folder with all audio files
+        if not os.path.exists(audio_path):  # if the folder doesn't exist already, make it
             os.mkdir(audio_path)
 
-        for file in files: # iterate through every file
+        for file in files:  # iterate through every file
             filename = file.filename
             if filename == '':
                 return 'No file selected'
-            
+
             # save audio files in audio folder
             elif filename.endswith('.mp3') or filename.endswith('.m4a') or filename.endswith('.wav'):
                 path = os.path.join(audio_path, filename)
@@ -41,18 +53,22 @@ def make_pptx():
             else:
                 pptx_path = os.path.join(root, filename)
                 file.save(pptx_path)
-    
+
     return 'Files uploaded successfully'
 
         
         
-@app.route('/process_data', methods=['GET','POST'])
+@app.route('/process_data', methods=['GET', 'POST'])
 def process_data():
     print('hello world')
     global pptx_path
     global audio_path
-    narrated_file = make_narrated_pptx(pptx_path, audio_path) # create narrated file
+    global root
+
+    narrated_file = make_narrated_pptx(pptx_path, audio_path, root)  # Pass root as an argument to make_narrated_pptx
     return render_template('download.html', filename=narrated_file)
+
+
 
 @app.route('/download')
 def download():
@@ -68,7 +84,7 @@ def index():
 
 
 
-def make_narrated_pptx(pptx_path, audio_folder_path):
+def make_narrated_pptx(pptx_path, audio_folder_path, root):
     #print(pptx_path)
     left = top = width = height = Inches(0.2)
     picture_path = r"static/mic.png"
@@ -83,8 +99,9 @@ def make_narrated_pptx(pptx_path, audio_folder_path):
                                                     poster_frame_image=picture_path,
                                                     mime_type='video/unknown')
     
-    narrated_path = os.path.join(app.config['UPLOAD_FOLDER'], 'narrated.pptx') # make path to narrated pptx file
-    prs.save(narrated_path) # save file to path
+
+    narrated_path = os.path.join(root, 'narrated.pptx')  # Use root directory to store the narrated file
+    prs.save(narrated_path)  # save file to path
     return narrated_path
     
 
