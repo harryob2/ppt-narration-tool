@@ -79,23 +79,9 @@
     <h1>Narrated PowerPoint Download</h1>
     <h5>Your narrated PowerPoint file is ready for download.</h5>
     <div class="download-button">
-        <p><a href="{{ url_for('download', filename=filename) }}" class="btn btn-primary" onclick="trackButtonClick('download_button');openGoogleForm()">Download</a></p>
+        <p><a id="download-button" class="btn btn-primary" href="{{ url_for('download', filename=filename) }}" onclick="window.open('https://forms.gle/99y8hS4PaJdV3QGw9', '_blank')">Download</a></p>
     </div>
 
-    <script>
-        function trackButtonClick(button_id) {
-          gtag('event', 'click', {
-            'event_category': 'Button',
-            'event_label': button_id
-          });
-        }
-    </script>
-
-    <script>
-        function openGoogleForm() {
-            window.open('https://forms.gle/99y8hS4PaJdV3QGw9', '_blank');
-        }
-    </script>
       
 
     <a href='https://harryobrien.eu/feedback-ppt/' target="_blank">Click here to give some much desired feedback</a>
