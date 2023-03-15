@@ -38,7 +38,6 @@ def make_pptx():
         audio_path = os.path.join(root, 'audio')  # make path to folder with all audio files
         if not os.path.exists(audio_path):  # if the folder doesn't exist already, make it
             os.mkdir(audio_path)
-            print(f'Audio folder path: {audio_path}')
 
 
         for file in files:  # iterate through every file
@@ -64,7 +63,6 @@ def make_pptx():
         
 @app.route('/process_data', methods=['GET', 'POST'])
 def process_data():
-    print('hello world')
     global pptx_path
     global audio_path
     global root
@@ -76,7 +74,9 @@ def process_data():
 
 @app.route('/download')
 def download():
+    global pptx_path
     filename = request.args.get('filename')
+    print(f'Successful download: {pptx_path}')
     return send_file(filename, as_attachment=True)
 
 
