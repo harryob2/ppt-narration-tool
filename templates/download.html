@@ -2,6 +2,19 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
+
+
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-TCX4XZS');</script>
+    <!-- End Google Tag Manager -->
+
+
+
     <title>Download Narrated PowerPoint</title>
 
     <!-- Include Bootstrap CSS for additional styling options -->
@@ -47,24 +60,43 @@
         }
     </style>
 
-    <!-- Google tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-L4ZGMDWNXS">
-    </script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
 
-    gtag('config', 'G-L4ZGMDWNXS');
-    </script>
+
+
 
 </head>
 <body>
+
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TCX4XZS"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+
+
+
     <h1>Narrated PowerPoint Download</h1>
     <h5>Your narrated PowerPoint file is ready for download.</h5>
     <div class="download-button">
-        <p><a href="{{ url_for('download', filename=filename) }}" class="btn btn-primary">Download</a></p>
+        <p><a href="{{ url_for('download', filename=filename) }}" class="btn btn-primary" onclick="trackButtonClick('download_button');openGoogleForm()">Download</a></p>
     </div>
+
+    <script>
+        function trackButtonClick(button_id) {
+          gtag('event', 'click', {
+            'event_category': 'Button',
+            'event_label': button_id
+          });
+        }
+    </script>
+
+    <script>
+        function openGoogleForm() {
+            window.open('https://forms.gle/99y8hS4PaJdV3QGw9', '_blank');
+        }
+    </script>
+      
 
     <a href='https://harryobrien.eu/feedback-ppt/' target="_blank">Click here to give some much desired feedback</a>
 
