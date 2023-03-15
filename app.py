@@ -12,12 +12,6 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'thekey'
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['UPLOAD_FOLDER'] = 'tmp'
-#session(app)
-
-# Remove global variables
-# root = os.path.join(os.path.abspath(os.path.dirname(__file__)), app.config['UPLOAD_FOLDER'])
-# narrated_path = str()
-# pptx_path = str()
 
 
 # Create a new temporary directory for each user's files
@@ -28,9 +22,6 @@ def create_temp_dir():
 # Update the make_pptx() function
 @app.route('/make_pptx', methods=['GET', 'POST'])
 def make_pptx():
-    # global pptx_path
-    # global audio_path
-    # global root
     if request.method == 'POST':
         files = request.files.getlist('file')  # get list of all uploaded files
 
@@ -63,22 +54,8 @@ def make_pptx():
                 session['pptx_path'] = pptx_path
                 print(f'Powerpoint saved: {pptx_path}')
 
-        
-        
-
-
     return 'Files uploaded successfully'
-
-        
-
-# @app.route('/process_data', methods=['GET', 'POST'])
-# def process_data():
-#     global pptx_path
-#     global audio_path
-#     global root
-
-#     narrated_file = make_narrated_pptx(pptx_path, audio_path, root)  # Pass root as an argument to make_narrated_pptx
-#     return render_template('download.html', filename=narrated_file)        
+   
         
 @app.route('/process_data', methods=['GET', 'POST'])
 def process_data():
@@ -91,7 +68,6 @@ def process_data():
     return render_template('download.html', filename=narrated_file)
 
 
-
 @app.route('/download')
 def download():
     # global pptx_path
@@ -99,12 +75,6 @@ def download():
     print('Successful download')
     return send_file(filename, as_attachment=True)
 
-
-
-# @app.route('/', methods=['GET', 'POST'])
-# def index():
-#     delete(root) # empty the tmp folder
-#     return render_template('pptx_upload.html')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -132,14 +102,12 @@ def make_narrated_pptx(pptx_path, audio_folder_path, temp_dir):
                                                     left,top,width,height,
                                                     poster_frame_image=picture_path,
                                                     mime_type='video/unknown')
-    
 
     narrated_path = os.path.join(temp_dir, 'narrated.pptx')  # Use temporary directory to store the narrated file
     print((f'Final narrated path saved as: {narrated_path}'))
     prs.save(narrated_path)  # save file to path
     return narrated_path
     
-
 
 def delete(folder): # this function deletes everything inside the folder, but not the folder itself
     if os.path.exists(folder): # first it checks if the folder exists
