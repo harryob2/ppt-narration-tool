@@ -36,6 +36,7 @@ def make_pptx():
         root = create_temp_dir()
 
         audio_path = os.path.join(root, 'audio')  # make path to folder with all audio files
+        print(f'Audio folder path: {audio_path}')
         if not os.path.exists(audio_path):  # if the folder doesn't exist already, make it
             os.mkdir(audio_path)
 
@@ -48,11 +49,13 @@ def make_pptx():
             elif filename.endswith('.mp3') or filename.endswith('.m4a') or filename.endswith('.wav'):
                 path = os.path.join(audio_path, filename)
                 file.save(path)
+                print(f'Audio file saved: {path}')
 
             # save pptx file
             else:
                 pptx_path = os.path.join(root, filename)
                 file.save(pptx_path)
+                print(f'Powerpoint saved: {pptx_path}')
 
     return 'Files uploaded successfully'
 
@@ -85,7 +88,9 @@ def index():
 
 
 def make_narrated_pptx(pptx_path, audio_folder_path, root):
-    #print(pptx_path)
+    print(f'Path for pptx passed to make_narrated_pptx(): {pptx_path}')
+    print(f'Path for audio folder passed as: {audio_folder_path}')
+    print(f'Root passed as: {root}')
     left = top = width = height = Inches(0.2)
     picture_path = r"static/mic.png"
     prs = Presentation(pptx_path)
@@ -101,6 +106,7 @@ def make_narrated_pptx(pptx_path, audio_folder_path, root):
     
 
     narrated_path = os.path.join(root, 'narrated.pptx')  # Use root directory to store the narrated file
+    print((f'Final narrated path saved as: {narrated_path}'))
     prs.save(narrated_path)  # save file to path
     return narrated_path
     
