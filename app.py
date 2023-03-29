@@ -21,6 +21,8 @@ def index():
 
     audio_path = os.path.join(temp_dir, 'audio')
     os.mkdir(audio_path)
+    session['audio_path'] = audio_path
+    session.modified = True
 
     return render_template('pptx_upload.html')
 
@@ -48,13 +50,8 @@ def make_pptx():
         files = request.files.getlist('file')  # get list of all uploaded files
 
         # Create a new temporary directory
-        temp_dir = session['temp_dir']
-
-        audio_path = os.path.join(temp_dir, 'audio')  # make path to folder with all audio files
-        session['audio_path'] = audio_path
-        if not os.path.exists(audio_path):  # if the folder doesn't exist already, make it
-            os.mkdir(audio_path)
-            
+        temp_dir = session.get('temp_dir')
+        audio_path = session.get('audio_path')  
 
         for file in files:  # iterate through every file
             filename = file.filename
@@ -71,6 +68,7 @@ def make_pptx():
             else:
                 pptx_path = os.path.join(temp_dir, filename)
                 session['pptx_path'] = pptx_path
+                session.modified = True
                 file.save(pptx_path)
                 print(f'Powerpoint saved: {pptx_path}')
 
@@ -119,7 +117,6 @@ def make_narrated_pptx(pptx_path, audio_folder_path, temp_dir):
     prs.save(narrated_path)  # save file to path
     return narrated_path
     
-
 
   
 if __name__ == '__main__':
