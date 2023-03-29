@@ -17,12 +17,15 @@ app.config['UPLOAD_FOLDER'] = 'tmp'
 @app.route('/', methods=['GET', 'POST'])
 def index():
     temp_dir = session.get('temp_dir')
+    print(temp_dir)
 
     if not temp_dir:
         session['temp_dir'] = create_temp_dir()
         temp_dir = session.get('temp_dir')
+        print(f'newly created temp dir is {temp_dir}')
 
     audio_path = os.path.join(temp_dir, 'audio')
+    print(audio_path)
 
     if not os.path.exists(audio_path):
         os.mkdir(audio_path)
