@@ -7,6 +7,10 @@ import collections.abc
 import shutil
 import gunicorn
 import tempfile
+from lxml import etree
+from pptx.oxml.xmlchemy import qn
+from pptx.opc.package import PartFactory
+from pptx.parts.media import MediaPart
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'thekey'
@@ -76,13 +80,20 @@ def download():
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    session['temp_dir'] = create_temp_dir()
-    temp_dir = session.get('temp_dir')
-    if temp_dir:
-        delete(temp_dir)
+    user_temp_dir = session.get('temp_dir')
+    if user_temp_dir:
+        delete(user_temp_dir)
+    else:
+        session['temp_dir'] = create_temp_dir()
     return render_template('pptx_upload.html')
 
-
+from pptx.opc.package import PartFactory
+from pptx.parts.media import MediaPart
+for aud_type in [ 'audio/mp3', 'audio/mp4', 'audio/mid', 'audio/x-wav', 'audio/mpeg', ]:PartFactory.part_type_for.update(
+{
+aud_type: MediaPart
+}
+)
 
 def make_narrated_pptx(pptx_path, audio_folder_path, temp_dir):
     print(f'Path for pptx passed to make_narrated_pptx(): {pptx_path}')
@@ -96,15 +107,26 @@ def make_narrated_pptx(pptx_path, audio_folder_path, temp_dir):
     for filename in os.listdir(audio_folder): # go through every audio file
         audio_path = os.path.join(audio_folder, filename) # create path to audio file
         file_number = int(os.path.splitext(filename)[0]) - 1 # get slide number from audio file name
-        prs.slides[file_number].shapes.add_movie(audio_path, # add audio file to slide
-                                                    left,top,width,height,
-                                                    poster_frame_image=picture_path,
-                                                    mime_type='video/unknown')
+        slide = prs.slides[file_number]
+        movie = slide.shapes.add_movie(audio_path, # add audio file to slide
+                                       left,top,width,height,
+                                       poster_frame_image=picture_path,
+                                       mime_type='video/unknown'
+                                       )
+        
+    
+    for aud_type in [ 'audio/mp3', 'audio/mp4', 'audio/mid', 'audio/x-wav', 'audio/mpeg' ]:
+        PartFactory.part_type_for.update(
+        {
+        aud_type: MediaPart
+        }
+        )
 
     narrated_path = os.path.join(temp_dir, 'narrated.pptx')  # Use temporary directory to store the narrated file
     print((f'Final narrated path saved as: {narrated_path}'))
     prs.save(narrated_path)  # save file to path
     return narrated_path
+
     
 
 def delete(folder): # this function deletes everything inside the folder, but not the folder itself
