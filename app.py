@@ -16,23 +16,14 @@ app.config['UPLOAD_FOLDER'] = 'tmp'
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    temp_dir = session.get('temp_dir')
-    print(temp_dir)
-
-    if not temp_dir:
-        session['temp_dir'] = create_temp_dir()
-        temp_dir = session.get('temp_dir')
-        print(f'newly created temp dir is {temp_dir}')
+    temp_dir = create_temp_dir()
+    session['temp_dir'] = temp_dir
 
     audio_path = os.path.join(temp_dir, 'audio')
-    print(audio_path)
-
-    if not os.path.exists(audio_path):
-        os.mkdir(audio_path)
-    else:
-        empty(temp_dir)
+    os.mkdir(audio_path)
 
     return render_template('pptx_upload.html')
+
 
 
 # Create a new temporary directory for each user's files
