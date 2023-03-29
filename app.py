@@ -16,14 +16,14 @@ app.config['UPLOAD_FOLDER'] = 'tmp'
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    user_temp_dir = session.get('temp_dir')
-    if user_temp_dir:
-        delete(user_temp_dir)
+    temp_dir = session.get('temp_dir')
+    if temp_dir:
+        empty(temp_dir)
 
     else:
         session['temp_dir'] = create_temp_dir()
 
-    audio_path = os.path.join(user_temp_dir, 'audio')
+    audio_path = os.path.join(session.get('temp_dir'), 'audio')
     os.mkdir(audio_path)
 
     return render_template('pptx_upload.html')
@@ -32,6 +32,16 @@ def index():
 def create_temp_dir():
     temp_dir = tempfile.mkdtemp()
     return temp_dir
+
+def empty(folder):                                  # this function emptys the folder
+    if os.path.exists(folder):                      # first it checks if the folder exists
+        for item in os.listdir(folder):             # then it iterates through every item in the folder
+            item_path = os.path.join(folder, item)  # gets the path
+            if os.path.isfile(item_path):           # checks if the item is a file
+                os.remove(item_path)                # removes file
+
+            elif os.path.isdir(item_path):          # else if folder
+                shutil.rmtree(item_path)            # delete folder
 
 # Update the make_pptx() function
 @app.route('/make_pptx', methods=['GET', 'POST'])
@@ -47,7 +57,6 @@ def make_pptx():
         if not os.path.exists(audio_path):  # if the folder doesn't exist already, make it
             os.mkdir(audio_path)
             
-
 
         for file in files:  # iterate through every file
             filename = file.filename
@@ -112,16 +121,6 @@ def make_narrated_pptx(pptx_path, audio_folder_path, temp_dir):
     prs.save(narrated_path)  # save file to path
     return narrated_path
     
-
-def delete(folder): # this function deletes everything inside the folder, but not the folder itself
-    if os.path.exists(folder): # first it checks if the folder exists
-        for item in os.listdir(folder): # then it iterates through every item in the folder
-            item_path = os.path.join(folder, item) # gets the path
-            if os.path.isfile(item_path): # checks if the item is a file
-                os.remove(item_path) # removes file
-
-            elif os.path.isdir(item_path):
-                shutil.rmtree(item_path)
 
 
   
