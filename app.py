@@ -14,6 +14,20 @@ app.config['SESSION_TYPE'] = 'filesystem'
 app.config['UPLOAD_FOLDER'] = 'tmp'
 
 
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    user_temp_dir = session.get('temp_dir')
+    if user_temp_dir:
+        delete(user_temp_dir)
+
+    else:
+        session['temp_dir'] = create_temp_dir()
+
+    audio_path = os.path.join(user_temp_dir, 'audio')
+    os.mkdir(audio_path)
+
+    return render_template('pptx_upload.html')
+
 # Create a new temporary directory for each user's files
 def create_temp_dir():
     temp_dir = tempfile.mkdtemp()
@@ -73,15 +87,6 @@ def download():
     print('Successful download')
     return send_file(filename, as_attachment=True)
 
-
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    user_temp_dir = session.get('temp_dir')
-    if user_temp_dir:
-        delete(user_temp_dir)
-    else:
-        session['temp_dir'] = create_temp_dir()
-    return render_template('pptx_upload.html')
 
 
 
