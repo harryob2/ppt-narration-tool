@@ -1,5 +1,5 @@
 # ppt-narration-tool
-This branch is for testing purposes only, specifically on building an add_audio() function for the python-pptx package. You can test it out [here](https://python-pptx-add-audio.herokuapp.com/).
+This branch is for testing purposes only, specifically for building an add_audio() function for the python-pptx package. You can test it out [here](https://python-pptx-add-audio.herokuapp.com/).
 
 The link to the original is ppt-narrator.com
 
