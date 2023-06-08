@@ -2,10 +2,6 @@ from flask import Flask, url_for, render_template, request, send_file, session
 import os
 from pptx import Presentation
 from pptx.util import Inches
-import collections
-import collections.abc
-import shutil
-import gunicorn
 import tempfile
 
 app = Flask(__name__)
@@ -27,21 +23,11 @@ def index():
     return render_template('pptx_upload.html')
 
 
-
 # Create a new temporary directory for each user's files
 def create_temp_dir():
     temp_dir = tempfile.mkdtemp()
     return temp_dir
 
-def empty(folder):                                  # this function emptys the folder
-    if os.path.exists(folder):                      # first it checks if the folder exists
-        for item in os.listdir(folder):             # then it iterates through every item in the folder
-            item_path = os.path.join(folder, item)  # gets the path
-            if os.path.isfile(item_path):           # checks if the item is a file
-                os.remove(item_path)                # removes file
-
-            elif os.path.isdir(item_path):          # else if folder
-                shutil.rmtree(item_path)            # delete folder
 
 # Update the make_pptx() function
 @app.route('/make_pptx', methods=['GET', 'POST'])
@@ -51,7 +37,7 @@ def make_pptx():
 
         # Create a new temporary directory
         temp_dir = session.get('temp_dir')
-        audio_path = session.get('audio_path')  
+        audio_path = session.get('audio_path')
 
         for file in files:  # iterate through every file
             filename = file.filename
@@ -73,8 +59,8 @@ def make_pptx():
                 print(f'Powerpoint saved: {pptx_path}')
 
     return 'Files uploaded successfully'
-   
-        
+
+
 @app.route('/process_data', methods=['GET', 'POST'])
 def process_data():
     temp_dir = session.get('temp_dir')
@@ -93,31 +79,26 @@ def download():
     return send_file(filename, as_attachment=True)
 
 
-
-
 def make_narrated_pptx(pptx_path, audio_folder_path, temp_dir):
     print(f'Path for pptx passed to make_narrated_pptx(): {pptx_path}')
     print(f'Path for audio folder passed as: {audio_folder_path}')
     print(f'Temporary directory passed as: {temp_dir}')
-    left = top = width = height = Inches(0.2)
     picture_path = r"static/mic.png"
     prs = Presentation(pptx_path)
-    audio_folder = fr"{audio_folder_path}"
 
-    for filename in os.listdir(audio_folder): # go through every audio file
-        audio_path = os.path.join(audio_folder, filename) # create path to audio file
-        file_number = int(os.path.splitext(filename)[0]) - 1 # get slide number from audio file name
-        prs.slides[file_number].shapes.add_movie(audio_path, # add audio file to slide
-                                                    left,top,width,height,
-                                                    poster_frame_image=picture_path,
-                                                    mime_type='video/unknown')
+    for slide in prs.slides:
+        slide_number = slide.slide_id  # get the slide number
+        audio_filename = f"{slide_number}.mp3"  # assuming audio files are named as slide_number.mp3
+        audio_path = os.path.join(audio_folder_path, audio_filename)  # create path to audio file
+
+        if os.path.exists(audio_path):
+            slide.shapes.add_audio(audio_path)  # add audio file to slide
 
     narrated_path = os.path.join(temp_dir, 'narrated.pptx')  # Use temporary directory to store the narrated file
-    print((f'Final narrated path saved as: {narrated_path}'))
+    print(f'Final narrated path saved as: {narrated_path}')
     prs.save(narrated_path)  # save file to path
     return narrated_path
-    
 
-  
+
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run(debug=True)
