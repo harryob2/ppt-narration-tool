@@ -3,8 +3,10 @@ from pathlib import Path
 
 # Preload libjpeg from pylibjpeg-libjpeg if available to satisfy Pillow dependency on Vercel
 try:
-    spec = importlib.util.find_spec('pylibjpeg_libjpeg')
-    if spec and spec.submodule_search_locations:
+    for pkg in ('pylibjpeg_libjpeg', 'imagecodecs'):
+        spec = importlib.util.find_spec(pkg)
+        if not (spec and spec.submodule_search_locations):
+            continue
         lib_dir = Path(spec.submodule_search_locations[0])
         search_dirs = [lib_dir, lib_dir / "..", lib_dir / "libs", lib_dir / ".libs"]
         loaded = False
