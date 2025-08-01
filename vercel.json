@@ -11,5 +11,6 @@
       "src": "/(.*)",
       "dest": "/api/app.py"
     }
-  ]
+  ],
+  "installCommand": "dnf install -y libjpeg62 || yum install -y libjpeg-turbo"
 }
