@@ -1,4 +1,4 @@
-# Building Pillow from source with --no-binary should compile without JPEG dependencies
+# Using older Pillow version that may have different libjpeg dependencies
 
 from flask import Flask, url_for, render_template, request, send_file, session, jsonify
 import os
