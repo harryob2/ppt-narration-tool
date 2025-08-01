@@ -1,4 +1,21 @@
-# Pillow-SIMD should have libjpeg statically linked, removing need for preloading
+import ctypes
+import os
+
+# Preload libjpeg-turbo library to satisfy Pillow's dependency
+try:
+    # Try to find and load libjpeg.so.62 from libjpeg-turbo package
+    import site
+    for path in site.getsitepackages():
+        for root, dirs, files in os.walk(path):
+            for file in files:
+                if 'libjpeg.so.62' in file:
+                    lib_path = os.path.join(root, file)
+                    ctypes.CDLL(lib_path)
+                    print(f"Loaded libjpeg from: {lib_path}")
+                    break
+except Exception as e:
+    print(f"Could not preload libjpeg: {e}")
+    pass
 
 from flask import Flask, url_for, render_template, request, send_file, session, jsonify
 import os
