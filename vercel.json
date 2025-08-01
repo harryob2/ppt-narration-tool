@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "app.py",
+      "use": "@vercel/python",
+      "config": {
+        "runtime": "python3.11",          // pick any 3.9-3.12 Vercel supports
+        "maxLambdaSize": "50mb"          // room for the pptx libs
+      }
+    }
+  ],
+  "routes": [
+    { "src": "/static/(.*)", "dest": "static/$1" },   // serve mic.png, CSS, etc.
+    { "src": "/(.*)",          "dest": "app.py" }     // everything else → Flask
+  ]
+}
