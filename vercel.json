@@ -6,12 +6,16 @@
       "use": "@vercel/python",
       "config": {
         "runtime": "python3.11",
-        "maxLambdaSize": "50mb"
+        "maxLambdaSize": "50mb",
+        "includeFiles": [
+          "templates/**",
+          "static/**"
+        ]
       }
     }
   ],
   "routes": [
     { "src": "/static/(.*)", "dest": "static/$1" },
-    { "src": "/(.*)",          "dest": "app.py" }
+    { "src": "/(.*)", "dest": "app.py" }
   ]
 }
