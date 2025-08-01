@@ -1,3 +1,20 @@
+import ctypes, importlib.util, sys, os
+from pathlib import Path
+
+# Preload libjpeg from pylibjpeg-libjpeg if available to satisfy Pillow dependency on Vercel
+try:
+    spec = importlib.util.find_spec('pylibjpeg_libjpeg')
+    if spec and spec.submodule_search_locations:
+        lib_dir = Path(spec.submodule_search_locations[0])
+        for so_name in ('libjpeg.so.62', 'libjpeg.so'):
+            so_path = lib_dir / so_name
+            if so_path.exists():
+                ctypes.CDLL(str(so_path))
+                break
+except Exception:
+    # If anything goes wrong, continue – Pillow will error out if libjpeg still missing
+    pass
+
 from flask import Flask, url_for, render_template, request, send_file, session, jsonify
 import os
 from pptx import Presentation
