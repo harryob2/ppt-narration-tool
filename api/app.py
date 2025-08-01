@@ -1,30 +1,4 @@
-import ctypes, importlib.util, sys, os
-from pathlib import Path
-
-# Preload libjpeg from pylibjpeg-libjpeg if available to satisfy Pillow dependency on Vercel
-try:
-    for pkg in ('pylibjpeg_libjpeg', 'imagecodecs'):
-        spec = importlib.util.find_spec(pkg)
-        if not (spec and spec.submodule_search_locations):
-            continue
-        lib_dir = Path(spec.submodule_search_locations[0])
-        search_dirs = [lib_dir, lib_dir / "..", lib_dir / "libs", lib_dir / ".libs"]
-        loaded = False
-        for d in search_dirs:
-            if not d.exists():
-                continue
-            for so_path in d.glob("libjpeg*.so*"):
-                try:
-                    ctypes.CDLL(str(so_path))
-                    loaded = True
-                    break
-                except OSError:
-                    continue
-            if loaded:
-                break
-except Exception:
-    # If anything goes wrong, continue – Pillow will error out if libjpeg still missing
-    pass
+# Pillow-SIMD should have libjpeg statically linked, removing need for preloading
 
 from flask import Flask, url_for, render_template, request, send_file, session, jsonify
 import os
