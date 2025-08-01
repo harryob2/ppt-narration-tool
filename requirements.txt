@@ -1,3 +1,4 @@
+--no-binary pillow
 lxml>=5.1.0
 python-pptx>=0.6.21
 Flask==2.2.2
